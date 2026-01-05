@@ -12,16 +12,38 @@ This will be the main file in which my record system runs
 #include <stdbool.h>
 #include "headers\add_record.h"
 
+
 // FUNCTIONS
 
 // General Functions
 
-FILE copy_and_create_csv( const char *path ){
+FILE copy_and_create_csv( const char *dir  , const char *recordFile){
     // check if file exists, if so copy it and create new, if not create new
     FILE *file;
-    if((file = fopen(path , "r"))){
-        
-    } // if((file = fopen(path , "r")))
+    char bkup_path[512];
+    int character;
+
+    // if  corrupted file exists create a backup
+    // else create the file
+    if((file = fopen(recordFile , "r"))){
+        snprintf(bkup_path , sizeof(bkup_path) ,"%s%s" , dir , "records/library-books.bak");
+        FILE *bak = fopen( bkup_path , "w");
+        while( (character = fgetc(file)) != EOF){
+            fputc( character , bak);
+        }
+        // close the files and remove the corrupted
+        fclose(file);
+        fclose(bak);
+        int status = remove(recordFile);
+        printf("status = %d\n", status);
+        printf("Created backup file at the location: %s\n" , bkup_path);
+        printf("Removed corrupted file %s\n" , recordFile);
+    }
+    if(!(file = fopen(recordFile , "w+"))){
+        perror("File creation failed!!\n");
+        exit(EXIT_FAILURE);
+    }
+
 } //copy_and_create_csv()
 
 bool check_corruption(const char *path){
@@ -82,21 +104,22 @@ FILE check_record_file(){
 
     const char *file = __FILE__; // this will grab the current file we are running this in
     int fileLength = strlen(file);
-    char dir[512];
-    char recordFile[25] = "records/library-books.csv";
+    
+    // dynaimically set our files
+    size_t dirSize = 512;
+    char *dir = malloc(dirSize);
+    char main_csv[512];
+    
+    // get rid of record-management from file name
     int end = fileLength - 19; // record-management.c is 19 characters long
-
     for( int i = 0; i < end; i++){
         dir[i] = file[i];
     } // for( int i = 0; i < 19; i++)
-    dir[end] = '\0';
 
-    strncat(dir, recordFile, sizeof(dir) - strlen(dir) - 1);
-
-
+    snprintf(main_csv,  sizeof(main_csv) , "%s%s" , dir ,  "records/library-books.csv");
     bool validFile = check_corruption(dir);
     if(!validFile){
-        copy_and_create_csv(dir);
+        copy_and_create_csv( dir , main_csv );
     }
 
 } // FILE check_record_file()
