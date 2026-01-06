@@ -1,5 +1,1 @@
-name,age,job
-Alice,30,Dev
-Bob,25,"Engineer
-Charlie 40 Doctor
-\x00\x00\x00,??? , binary
+studentID; studentName; bookID; bookTitle

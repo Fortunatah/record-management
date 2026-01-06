@@ -34,15 +34,16 @@ FILE copy_and_create_csv( const char *dir  , const char *recordFile){
         // close the files and remove the corrupted
         fclose(file);
         fclose(bak);
-        int status = remove(recordFile);
-        printf("status = %d\n", status);
-        printf("Created backup file at the location: %s\n" , bkup_path);
         printf("Removed corrupted file %s\n" , recordFile);
+        printf("Created backup file at the location: %s\n" , bkup_path);
     }
     if(!(file = fopen(recordFile , "w+"))){
         perror("File creation failed!!\n");
         exit(EXIT_FAILURE);
+    }else{
+        fprintf(file, "studentID; studentName; bookID; bookTitle;");
     }
+    fclose(file);
 
 } //copy_and_create_csv()
 
@@ -69,13 +70,14 @@ bool check_corruption(const char *path){
     // Validate Column count
     int count = 1;
     for (size_t i = 0; i < strlen(line); i++) {
-        if (line[i] == ',') count++;
+        if (line[i] == ';') count++;
     } // for (size_t i = 0; i < strlen(line); i++)
+
         // Set column count based on first valid row
     if (cols == -1) cols = count;
 
     // Validate consistent column count
-    if (count != cols || count != 3) {
+    if (count != cols || count != 5) {
         fclose(file);
         return false;
     }
@@ -98,7 +100,7 @@ bool check_corruption(const char *path){
     return true;
 } // bool check_corruption()
 
-FILE check_record_file(){
+char * check_record_file(){
     // In order to get the correct dir, we need to remove record-management.c from 
     // the dir string
 
@@ -117,10 +119,14 @@ FILE check_record_file(){
     } // for( int i = 0; i < 19; i++)
 
     snprintf(main_csv,  sizeof(main_csv) , "%s%s" , dir ,  "records/library-books.csv");
-    bool validFile = check_corruption(dir);
+    bool validFile = check_corruption(main_csv);
     if(!validFile){
         copy_and_create_csv( dir , main_csv );
     }
+    char * location = malloc(sizeof(main_csv));
+    strcpy(location , main_csv);
+    // return the CSV file after check
+    return location;
 
 } // FILE check_record_file()
 
@@ -162,10 +168,9 @@ int menu(){
 
 int main(){
     clear_screen();
-    check_record_file();
+    char * csvFile = check_record_file();
     printf("\n-------------Library Books Management System-------------\n");
     while(1){
-
     int menuOption = menu();
     if ( menuOption >= 10 || menuOption < 1){
             printf("Invalid, please enter a number between 1-9\n");
@@ -174,7 +179,7 @@ int main(){
     
     switch(menuOption){
         case 1:
-            print_test();
+            add_record_main();
             break;
         case 2:
             printf("view");

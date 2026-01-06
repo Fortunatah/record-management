@@ -3,6 +3,8 @@
 
 #include <stdio.h>
 
-void print_test();
+void add_record_main();
+void clear_screen();
+int verify_choice();
 
 #endif
