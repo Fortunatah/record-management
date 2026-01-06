@@ -11,6 +11,7 @@ This will be the main file in which my record system runs
 #include <string.h>
 #include <stdbool.h>
 #include "headers\add_record.h"
+#include "headers\general_functions.h"
 
 
 // FUNCTIONS
@@ -129,24 +130,6 @@ char * check_record_file(){
     return location;
 
 } // FILE check_record_file()
-
-void clear_screen(){
-    #ifdef _WIN32 // if windows operating system
-        system("cls");
-    #else
-        system("clear");
-    #endif
-} //void clear_screen()
-
-
-int verify_choice(){
-    int scanVal;
-    if(scanf("%d" , &scanVal) !=1){
-        while(getchar() !='\n');
-        return -1;
-    } // if(scanf("%d" , &scanVal) !=1)
-    return scanVal;
-}
 
 
 // Main Menu 

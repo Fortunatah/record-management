@@ -1,5 +1,21 @@
+/*
+This will be the add record script
+Here the user can add library records and students IDs
+*/
+
+
+// Functions
 #include <stdio.h>
+#include <string.h>
 #include "add_record.h"
+#include "general_functions.h"
+
+int prompt_for_record(){
+    printf("\nDuring this process if you want to exit and not add the student name please type exit\n");
+    //printf("Please enter in student ID: ");
+    //char *string;
+    verify_string();
+}
 
 int add_menu(){
     printf("1) Would you like to add a record?\n");
@@ -21,7 +37,7 @@ void add_record_main(){
 
         switch(addMenuOption){
             case 1:
-                printf("Hello\n");
+                prompt_for_record();
                 break;
             case 2:
                 clear_screen();

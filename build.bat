@@ -1,2 +1,2 @@
 @echo off
-gcc %CD%\record-management.c headers/add_record.c -I headers -o record-management.exe
+gcc %CD%\record-management.c headers/*.c -I headers -o record-management.exe
