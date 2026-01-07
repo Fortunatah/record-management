@@ -11,6 +11,17 @@ makes it cleaner and easier to access
 #include "general_functions.h"
 
 // Functions
+
+int int_length( int num){
+    int length = 0;
+    if(num <= 0 ) return 1;
+    while(num > 0 ){
+        length++;
+        num /= 10;
+    }
+    return length;
+}
+
 void clear_screen(){
     #ifdef _WIN32 // if windows operating system
         system("cls");
@@ -31,27 +42,28 @@ int verify_choice(){
 bool allCharacters(const char *buf){
     for( int i = 0; buf[i] != '\0' ; i++){
         if(!isalpha((unsigned char)buf[i])){
-            return false;
+            if(buf[i] == ' '){
+                continue;
+            }return false;
         }
     }
     return true;
 }
 
-char verify_string(){
+char *verify_string(void){
 
     char scanString[100];
-    // fgets(scanString , sizeof scanString , stdin);
-    //if(!fgets(scanString , sizeof scanString , stdin)){
-    //    printf("Not working\n");
-    //}
     if (strchr(scanString, '\n') == NULL) {
         int c;
         while ((c = getchar()) != '\n' && c != EOF) { }
     }
     fgets(scanString , sizeof scanString , stdin);
-    bool isTrue = allCharacters(scanString);
-    if(!isTrue){
-        printf("Please enter in a string, no spaces\n");
-   }
+    scanString[strcspn(scanString, "\n")] = '\0';
 
+    if(allCharacters(scanString)){
+        char *string = malloc(strlen(scanString) + 1);
+        if(!string) return NULL;
+        strcpy(string, scanString);
+        return string;
+    }
 }

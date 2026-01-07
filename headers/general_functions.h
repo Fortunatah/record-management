@@ -7,6 +7,13 @@ makes it cleaner and easier to access
 
 void clear_screen();
 int verify_choice();
-char verify_string();
+char * verify_string();
+int int_length();
+typedef struct{
+    int studentID;
+    char * studentName;
+    int bookID;
+    char * bookName;
+} record;
 
 #endif

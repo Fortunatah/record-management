@@ -10,11 +10,49 @@ Here the user can add library records and students IDs
 #include "add_record.h"
 #include "general_functions.h"
 
-int prompt_for_record(){
-    printf("\nDuring this process if you want to exit and not add the student name please type exit\n");
-    printf("Please enter in student ID: ");
-    //char *string;
-    verify_string();
+int prompt_for_record(record Record){
+    printf("\nFollow the process to add the record, at the end it will prompt you to confirm the writing of it\n");
+    while(1){
+        // First grab the student ID
+        printf("Please enter in 3 digit student ID: ");
+        int tempStudentName = verify_choice();
+        if( tempStudentName < 1 || int_length(tempStudentName) <=2){
+            printf("ID needs to be 3 digits long and all numbers\n");
+            continue;
+        }
+        // if all passes put entered ID as studentID 
+        Record.studentID = tempStudentName;
+        
+        // Student's Name
+        printf("Please enter in student's name: ");
+        char *tempName = verify_string();
+        if(tempName == NULL){
+            printf("Please enter name with no numbers\n");
+            continue;
+        }
+        // if all passes put entered name as Student Name
+        Record.studentName = tempName;
+
+        // First grab the student ID
+        printf("Please enter in 5 digit Book ID: ");
+        int tempBookID = verify_choice();
+        if( tempBookID < 1 || int_length(tempBookID) <=4){
+            printf("Book ID needs to be 5 digits long and all numbers\n");
+            continue;
+        }
+        // if all passes put entered ID as studentID 
+        Record.bookID = tempBookID;
+
+        // Student's Name
+        printf("Please enter in the title of the book: ");
+        char *tempTitle = verify_string();
+        if(tempTitle == NULL){
+            printf("Please enter name with no numbers\n");
+            continue;
+        }
+        // if all passes put entered name as Student Name
+        Record.studentName = tempTitle;
+    }
 }
 
 int add_menu(){
@@ -37,7 +75,8 @@ void add_record_main(){
 
         switch(addMenuOption){
             case 1:
-                prompt_for_record();
+                record Record;
+                prompt_for_record( Record );
                 break;
             case 2:
                 clear_screen();
