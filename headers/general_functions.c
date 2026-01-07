@@ -6,6 +6,8 @@ makes it cleaner and easier to access
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+#include <ctype.h>
 #include "general_functions.h"
 
 // Functions
@@ -26,10 +28,19 @@ int verify_choice(){
     return scanVal;
 }
 
+bool allCharacters(const char *buf){
+    for( int i = 0; buf[i] != '\0' ; i++){
+        if(!isalpha((unsigned char)buf[i])){
+            return false;
+        }
+    }
+    return true;
+}
+
 char verify_string(){
 
     char scanString[100];
-    fgets(scanString , sizeof scanString , stdin);
+    // fgets(scanString , sizeof scanString , stdin);
     //if(!fgets(scanString , sizeof scanString , stdin)){
     //    printf("Not working\n");
     //}
@@ -37,6 +48,10 @@ char verify_string(){
         int c;
         while ((c = getchar()) != '\n' && c != EOF) { }
     }
-    printf("string = %s\n", scanString);
+    fgets(scanString , sizeof scanString , stdin);
+    bool isTrue = allCharacters(scanString);
+    if(!isTrue){
+        printf("Please enter in a string, no spaces\n");
+   }
 
 }

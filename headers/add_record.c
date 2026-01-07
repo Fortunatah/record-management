@@ -12,7 +12,7 @@ Here the user can add library records and students IDs
 
 int prompt_for_record(){
     printf("\nDuring this process if you want to exit and not add the student name please type exit\n");
-    //printf("Please enter in student ID: ");
+    printf("Please enter in student ID: ");
     //char *string;
     verify_string();
 }
