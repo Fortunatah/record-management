@@ -8,13 +8,42 @@ Here the user can add library records and students IDs
 #include <stdio.h>
 #include <string.h>
 #include "add_record.h"
+#include <stdbool.h>
 #include "general_functions.h"
 
-int prompt_for_record(record Record){
+
+
+bool verify_correct_data(record Record){
+    clear_screen();
+    while(1){
+    printf("Please confirm you would like to add the following data to the records\n");
+    print_line();
+    printf("Student Name --> %s\n" , Record.studentName);
+    printf("Student ID --> %d\n" , Record.studentID);
+    printf("bookID --> %d\n" , Record.bookID);
+    printf("Title of Book --> %s\n" , Record.bookName);
+    print_line();
+    printf("Answer by typing (y/n):");
+
+    // grab the number from the verify char in general
+    int isChar = verify_char();
+
+    if( isChar  == 1 ){ // if they want to write
+        return true;
+    }else if( isChar == 0 ){ // if they do not want to write
+        return false;
+    }else{
+        continue;
+    }
+
+    }
+}
+
+void prompt_for_record(char *csvFile , record Record){
     printf("\nFollow the process to add the record, at the end it will prompt you to confirm the writing of it\n");
     while(1){
         // First grab the student ID
-        printf("Please enter in 3 digit student ID: ");
+        printf("Please enter in the 3 digit student ID: ");
         int tempStudentName = verify_choice();
         if( tempStudentName < 1 || int_length(tempStudentName) <=2){
             printf("ID needs to be 3 digits long and all numbers\n");
@@ -51,7 +80,17 @@ int prompt_for_record(record Record){
             continue;
         }
         // if all passes put entered name as Student Name
-        Record.studentName = tempTitle;
+        Record.bookName = tempTitle;
+        
+        bool isTrue = verify_correct_data(Record);
+
+        if(isTrue){
+            write_to_csv( csvFile , Record);
+        }else{
+            clear_screen();
+            return;
+        }
+
     }
 }
 
@@ -63,7 +102,7 @@ int add_menu(){
     return num;
 }
 
-void add_record_main(){
+void add_record_main( char *csvFile ){
     clear_screen();
     printf("\n-------------Add Records-------------\n");
     while(1){
@@ -76,7 +115,7 @@ void add_record_main(){
         switch(addMenuOption){
             case 1:
                 record Record;
-                prompt_for_record( Record );
+                prompt_for_record( csvFile , Record );
                 break;
             case 2:
                 clear_screen();

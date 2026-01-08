@@ -8,12 +8,18 @@ makes it cleaner and easier to access
 void clear_screen();
 int verify_choice();
 char * verify_string();
-int int_length();
+int int_length( int num );
+int count_columns(char *fileName);
+void print_line();
+int verify_char();
+
 typedef struct{
     int studentID;
     char * studentName;
     int bookID;
     char * bookName;
 } record;
+
+void write_to_csv(char *fileName , record Record); 
 
 #endif

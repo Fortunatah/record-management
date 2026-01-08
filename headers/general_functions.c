@@ -12,7 +12,47 @@ makes it cleaner and easier to access
 
 // Functions
 
-int int_length( int num){
+void print_line(){
+    printf("\n--------------------------------------------\n");
+}
+
+
+int verify_char() {
+    char line[64];
+    int c;
+
+    if (!fgets(line, sizeof line, stdin)) {
+        printf("Please enter either y or n\n");
+        return 2;
+    }
+
+    if (line[strlen(line) - 1] != '\n') {
+        while ((c = getchar()) != '\n' && c != EOF) {}
+    }
+
+    if (line[0] == 'y' && line[1] == '\n') return 1;
+    if (line[0] == 'n' && line[1] == '\n') return 0;
+
+    printf("Please enter either y or n\n");
+    return 2;
+}
+
+int count_columns(char *fileName){
+    FILE *file = fopen( fileName , "r");
+    int columnCount = 0;
+    char buffer[1024];
+    while (fgets(buffer , sizeof(buffer) , file)){
+        columnCount++;
+    }
+    return columnCount;
+}
+
+void write_to_csv(char *fileName , record Record ){
+    int count = count_columns(fileName);
+    printf("count columns = %d\n"  , count);
+}
+
+int int_length( int num ){
     int length = 0;
     if(num <= 0 ) return 1;
     while(num > 0 ){

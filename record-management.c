@@ -162,7 +162,7 @@ int main(){
     
     switch(menuOption){
         case 1:
-            add_record_main();
+            add_record_main( csvFile );
             break;
         case 2:
             printf("view");

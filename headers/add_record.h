@@ -3,6 +3,6 @@
 
 #include <stdio.h>
 
-void add_record_main();
+void add_record_main( char * csvFile );
 
 #endif
