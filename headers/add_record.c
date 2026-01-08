@@ -85,7 +85,13 @@ void prompt_for_record(char *csvFile , record Record){
         bool isTrue = verify_correct_data(Record);
 
         if(isTrue){
-            write_to_csv( csvFile , Record);
+            int rows = count_rows( csvFile );
+            write_to_csv( csvFile , Record , rows);
+            print_line();
+            printf("File has been added, press enter to return to add menu\n");
+            getchar();
+            clear_screen();
+            return;
         }else{
             clear_screen();
             return;

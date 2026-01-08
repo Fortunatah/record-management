@@ -16,7 +16,6 @@ void print_line(){
     printf("\n--------------------------------------------\n");
 }
 
-
 int verify_char() {
     char line[64];
     int c;
@@ -37,19 +36,78 @@ int verify_char() {
     return 2;
 }
 
-int count_columns(char *fileName){
+int count_rows(char *fileName){
     FILE *file = fopen( fileName , "r");
-    int columnCount = 0;
+    int rowsCount = 0;
     char buffer[1024];
     while (fgets(buffer , sizeof(buffer) , file)){
-        columnCount++;
+        rowsCount++;
     }
-    return columnCount;
+    return rowsCount;
 }
 
-void write_to_csv(char *fileName , record Record ){
-    int count = count_columns(fileName);
-    printf("count columns = %d\n"  , count);
+char *create_tmp_path(char *fileName){
+
+    int fileLength = strlen(fileName);
+    int end = fileLength - 17; // library-books.csv is 17 characters long
+    size_t bkupPathSize = 512;
+    char *dir = malloc(bkupPathSize);
+    
+    // Create the string of th file
+    for(int i = 0; i < end ; i++){
+        dir[i] = fileName[i];
+    }
+
+    // Create the copy at it's path
+    char bkupCSV[512];
+    snprintf( bkupCSV  , sizeof(bkupCSV) , "%s%s" , dir , "tmp.csv");
+    char * tmpLocation = malloc(sizeof(bkupCSV));
+    strcpy(tmpLocation , bkupCSV);
+    return tmpLocation;
+
+}
+void tmp_to_main( char *tmpFile , char *mainFile){
+    FILE *tmp = fopen( tmpFile , "r");
+    FILE *main = fopen( mainFile , "w");
+    char string[256];
+    while( fgets( string , sizeof(string) , tmp) != NULL){
+        fputs(string , main);
+    }
+    fclose(main);
+    fclose(tmp);
+    remove(tmpFile);
+}
+void write_to_csv(char *fileName , record Record  , int rows){    
+    char * tmpPath = create_tmp_path( fileName );
+    FILE *mainFile;
+    FILE *tmpFile = fopen( tmpPath, "a");
+    char string[256];
+    int count = 0;
+    
+    if((mainFile = fopen(fileName, "r"))){
+        while( fgets( string , sizeof(string) , mainFile) != NULL){
+            count++;
+            if( rows == count ){
+                if(rows == 1){
+                    fprintf(tmpFile , "%s\n%d;%s;%d;%s;\n",
+                    string,
+                    Record.studentID,
+                    Record.studentName,
+                    Record.bookID,
+                    Record.bookName);
+                    break;
+                    //printf("1.rows -> %d , put this string into file - >%s\n" , rows , string);
+                    }
+                
+                }
+            }
+    }
+    // we are closing them for now but we are going to copy tmp into main and delete temp
+    fclose(mainFile);
+    fclose(tmpFile);
+    tmp_to_main( tmpPath , fileName );
+
+
 }
 
 int int_length( int num ){
