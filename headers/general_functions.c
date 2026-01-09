@@ -97,9 +97,22 @@ void write_to_csv(char *fileName , record Record  , int rows){
                     Record.bookName);
                     break;
                     //printf("1.rows -> %d , put this string into file - >%s\n" , rows , string);
+                }else{
+                    fprintf(tmpFile , "%d;%s;%d;%s;\n",
+                    Record.studentID,
+                    Record.studentName,
+                    Record.bookID,
+                    Record.bookName);
+                    // if end of file put string
+                    // if not skip this string
+                    if(fgets( string , sizeof(string) , mainFile) == NULL){
+                        fputs( string , tmpFile );
+                    } 
                     }
-                
+                }else{
+                    fputs( string , tmpFile);
                 }
+
             }
     }
     // we are closing them for now but we are going to copy tmp into main and delete temp
