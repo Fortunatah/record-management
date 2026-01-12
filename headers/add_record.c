@@ -102,7 +102,7 @@ void prompt_for_record(char *csvFile , record Record){
 
 int add_menu(){
     printf("1) Would you like to add a record?\n");
-    printf("2) Or Go Back  to the Main Menu\n");
+    printf("2) Or Go Back to the Main Menu\n");
     printf("Please select from 1 or 2: ");
     int num = verify_choice();
     return num;

@@ -13,7 +13,7 @@ makes it cleaner and easier to access
 // Functions
 
 void print_line(){
-    printf("\n--------------------------------------------\n");
+    printf("\n------------------------------------------------------------------------------------------------------\n");
 }
 
 int verify_char() {

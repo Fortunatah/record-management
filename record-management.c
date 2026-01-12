@@ -11,6 +11,7 @@ This will be the main file in which my record system runs
 #include <string.h>
 #include <stdbool.h>
 #include "headers\add_record.h"
+#include "headers\view_records.h"
 #include "headers\general_functions.h"
 
 
@@ -165,7 +166,7 @@ int main(){
             add_record_main( csvFile );
             break;
         case 2:
-            printf("view");
+            view_record_main( csvFile );
             break;
         case 3:
             printf("search");
