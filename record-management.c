@@ -12,6 +12,7 @@ This will be the main file in which my record system runs
 #include <stdbool.h>
 #include "headers\add_record.h"
 #include "headers\view_records.h"
+#include "headers\search_record.h"
 #include "headers\general_functions.h"
 
 
@@ -169,7 +170,7 @@ int main(){
             view_record_main( csvFile );
             break;
         case 3:
-            printf("search");
+            search_record_main( csvFile );
             break;
         case 4:
             printf("edit");

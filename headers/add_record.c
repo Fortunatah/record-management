@@ -44,13 +44,20 @@ void prompt_for_record(char *csvFile , record Record){
     while(1){
         // First grab the student ID
         printf("Please enter in the 3 digit student ID: ");
-        int tempStudentName = verify_choice();
-        if( tempStudentName < 1 || int_length(tempStudentName) <=2){
+        int tempStudentID = verify_choice();
+        if( tempStudentID < 1 || int_length(tempStudentID) <=2 ){
             printf("ID needs to be 3 digits long and all numbers\n");
             continue;
         }
+        // check if ID exists
+        char ID[4];
+        sprintf( ID , "%d" , tempStudentID);
+        if((id_exists( ID , csvFile)) != NULL){
+            printf("ID %s is already in Database\n" , ID);
+            continue;
+        }
         // if all passes put entered ID as studentID 
-        Record.studentID = tempStudentName;
+        Record.studentID = tempStudentID;
         
         // Student's Name
         printf("Please enter in student's name: ");

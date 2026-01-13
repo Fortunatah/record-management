@@ -16,6 +16,29 @@ void print_line(){
     printf("\n------------------------------------------------------------------------------------------------------\n");
 }
 
+char *id_exists( char *ID , char *csvFile){
+    FILE *file;
+    char existingID[4];
+    int result;
+    char buffer[512];
+
+
+    if((file = fopen(csvFile , "r"))){
+        while(fgets( buffer , sizeof(buffer) , file)){
+            // copy the string and the trailing 0 at the end then compare
+            strncpy(existingID , buffer , 3);
+            existingID[3] = '\0';
+            result = strcmp( ID , existingID);
+            if(result == 0){
+                char *string = malloc(strlen(buffer) + 1);
+                strcpy( string , buffer);
+                return string;
+            }
+        }
+    }
+
+    return NULL;
+}
 int verify_char() {
     char line[64];
     int c;

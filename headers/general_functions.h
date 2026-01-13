@@ -24,5 +24,6 @@ typedef struct{
 void write_to_csv(char *fileName , record Record , int cols); 
 char * create_tmp_path(char * fileName);
 void temp_to_main( char *tmpFile , char *mainFile);
+char *id_exists( char *ID , char *csvFile);
 
 #endif
