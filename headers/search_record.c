@@ -5,7 +5,14 @@ This will help the user search the record they are looking for
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include "general_functions.h"
+
+void print_base_header(){
+    clear_screen();
+    print_line();
+    printf("Student ID , Student Name , Book ID, Book Name\n\n");
+}
 
 void clear_buffer(){
     int ch;
@@ -29,12 +36,63 @@ char *get_search_string(char *input){
 
 }
 
+bool keyword_in_string( char *tempString , char *searchString , size_t length){
+    // remove the semicolons
+    int i, j  = 0;
+    size_t count = 0;
+    char *cmpString = malloc(length + 1);
+    cmpString[length] = '\0';
+    for( i = 0; tempString[i] != '\0'; i++){
+        if(tempString[i] != ';' && tempString[i] != ' '){
+            tempString[j++] = tempString[i]; 
+        }
+    }
+    // printf("string = %s\n" , tempString);
+    // check if the search string exists
+    for( i = 0; tempString[i] != '\0'; i++){
+        if( count == length){
+            if((strcmp( searchString , cmpString)) == 0) return true;
+            count = 0;
+        }else{
+            cmpString[count] = tempString[i];
+            count++;
+        }
+    }
+    return false;
+}
+
 void print_found_keyword( char **lines , char *searchString){
     int count = 0;
-    int length = strlen( searchString); 
+    size_t length = strlen( searchString );
+    char tempString[512];
+    bool noneFound = true;
+    int lineCount = 0;
+
+    print_base_header();
     while(lines[count] != NULL){
-        printf("string = %s" , lines[count]);
+        strncpy(tempString, lines[count], sizeof tempString - 1);
+        tempString[sizeof tempString - 1] = '\0';
+        bool truth = keyword_in_string( tempString , searchString , length ); 
+        if((truth)){
+            printf("%s" , lines[count]);
+            noneFound = false;
+            lineCount++;
+        }
         count++;
+    }
+    // return to menu
+    if((noneFound)){
+        printf("\nFound no records containing %s\n" , searchString);
+        printf("Press enter to return to menu: ");
+        char buf[4];
+        fgets( buf , sizeof(buf) , stdin);
+        return;
+    }else{
+        printf("\nFound %d records containing %s\n", lineCount , searchString);
+        printf("Press enter to return to menu: ");
+        char buf[4];
+        fgets( buf , sizeof(buf) , stdin);
+        return;
     }
 }
 
@@ -43,6 +101,7 @@ void search_record_byKeyword( char *csvFile){
     FILE *file = fopen( csvFile , "r");
     char buffer[1024];
     int arrayCount = 0;
+
     while(1){
         clear_buffer();
         printf("Enter the keyword you would like to search , type 0 if you would like to escape this option: ");
@@ -69,6 +128,8 @@ void search_record_byKeyword( char *csvFile){
             fclose(file);
             char *searchString = get_search_string( input );
             print_found_keyword( lines , searchString );
+            clear_screen();
+            return;
         }
     }
 }

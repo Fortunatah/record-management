@@ -13,6 +13,7 @@ This will be the main file in which my record system runs
 #include "headers\add_record.h"
 #include "headers\view_records.h"
 #include "headers\search_record.h"
+#include "headers\edit_record.h"
 #include "headers\general_functions.h"
 
 
@@ -24,6 +25,7 @@ FILE copy_and_create_csv( const char *dir  , const char *recordFile){
     // check if file exists, if so copy it and create new, if not create new
     FILE *file;
     char bkup_path[512];
+    char realfile[512];
     int character;
 
     // if  corrupted file exists create a backup
@@ -142,11 +144,9 @@ int menu(){
     printf("3. Search records\n");
     printf("4. Edit record\n");
     printf("5. Delete record\n");
-    printf("6. Save records\n");
-    printf("7. Load records\n");
-    printf("8. Help\n");
-    printf("9. Quit\n");
-    printf("Please enter in a number 1-9: ");
+    printf("6. Help\n");
+    printf("7. Quit\n");
+    printf("Please enter in a number 1-7: ");
     num = verify_choice();
     return num;
 } // int menu;
@@ -157,7 +157,7 @@ int main(){
     printf("\n-------------Library Books Management System-------------\n");
     while(1){
     int menuOption = menu();
-    if ( menuOption >= 10 || menuOption < 1){
+    if ( menuOption >= 8 || menuOption < 1){
             printf("Invalid, please enter a number between 1-9\n");
             continue;
         } // if (menuOption == -1)
@@ -173,21 +173,15 @@ int main(){
             search_record_main( csvFile );
             break;
         case 4:
-            printf("edit");
+            edit_record_main( csvFile );
             break;
         case 5:
             printf("delete");
             break;
         case 6:
-            printf("save");
-            break;
-        case 7:
-            printf("load");
-            break;
-        case 8:
             printf("help");
             break;
-        case 9:
+        case 7:
             return 0;
         
         } // switch(menuOption)
