@@ -12,6 +12,32 @@ void clear_buffer(){
     while ((ch = getchar()) != '\n' && ch != EOF);
 }
 
+char *get_search_string(char *input){
+    char *string = malloc(sizeof(input));
+    strcpy( string , input ); 
+    int length = strlen(string);
+    int n; // for size
+    if( length == 1 || length == 2){
+        n = 1;
+    }else{
+        n = 3;
+    }
+    char *cpyString = malloc( n + 1);
+    strncpy( cpyString , string , n);
+    cpyString[n] = '\0';
+    return cpyString;
+
+}
+
+void print_found_keyword( char **lines , char *searchString){
+    int count = 0;
+    int length = strlen( searchString); 
+    while(lines[count] != NULL){
+        printf("string = %s" , lines[count]);
+        count++;
+    }
+}
+
 void search_record_byKeyword( char *csvFile){
     int rows = count_rows(csvFile);
     FILE *file = fopen( csvFile , "r");
@@ -39,6 +65,10 @@ void search_record_byKeyword( char *csvFile){
                 strcpy(lines[arrayCount] , buffer);
                 arrayCount++;
             }
+            lines[arrayCount] == NULL;
+            fclose(file);
+            char *searchString = get_search_string( input );
+            print_found_keyword( lines , searchString );
         }
     }
 }
