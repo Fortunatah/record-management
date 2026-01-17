@@ -126,16 +126,13 @@ void write_to_csv(char *fileName , record Record  , int rows){
                     break;
                     //printf("1.rows -> %d , put this string into file - >%s\n" , rows , string);
                 }else{
-                    fprintf(tmpFile , "%d;%s;%d;%s;\n",
+                    fprintf(tmpFile , "%s%d;%s;%d;%s;\n",
+                    string,
                     Record.studentID,
                     Record.studentName,
                     Record.bookID,
                     Record.bookName);
-                    // if end of file put string
-                    // if not skip this string
-                    if(fgets( string , sizeof(string) , mainFile) == NULL){
-                        fputs( string , tmpFile );
-                    } 
+                    fgets( string , sizeof(string) , mainFile); // skip the next line
                     }
                 }else{
                     fputs( string , tmpFile);
@@ -189,20 +186,89 @@ bool allCharacters(const char *buf){
     return true;
 }
 
-char *verify_string(void){
-
+char *verify_string(void) {
     char scanString[100];
+
+    if (!fgets(scanString, sizeof scanString, stdin)) {
+        return NULL;
+    }
+
     if (strchr(scanString, '\n') == NULL) {
         int c;
         while ((c = getchar()) != '\n' && c != EOF) { }
+    } else {
+        // remove newline
+        scanString[strcspn(scanString, "\n")] = '\0';
     }
-    fgets(scanString , sizeof scanString , stdin);
-    scanString[strcspn(scanString, "\n")] = '\0';
 
-    if(allCharacters(scanString)){
-        char *string = malloc(strlen(scanString) + 1);
-        if(!string) return NULL;
-        strcpy(string, scanString);
-        return string;
+    if (!allCharacters(scanString)) {
+        return NULL;
     }
+
+    char *string = malloc(strlen(scanString) + 1);
+    if (!string) return NULL;
+    strcpy(string, scanString);
+    return string;
+}
+
+int find_ID_row(char *fileName , int ID){
+    FILE *file = fopen( fileName , "r");
+    char IDstring[12];
+    snprintf( IDstring , sizeof(IDstring) , "%d" , ID); // put ID back into string
+    int rowsCount = 0;
+    char buffer[1024];
+    char rowID[3];
+
+    while (fgets(buffer , sizeof(buffer) , file)){
+        strncpy( rowID , buffer , 3);
+        rowID[3] = '\0'; // add null terminator
+        if((strcmp( rowID , IDstring)) == 0){
+            return rowsCount;
+        }
+        rowsCount++;
+    }
+    return rowsCount;
+}
+
+record split_record( char *string){
+    record existingRecord;
+    int semiCount = 0;
+    char tempString[1024];
+    char studentID[512];
+    char studentName[512];
+    char bookID[512];
+    char bookName[512];
+    int i;
+    int sID = 0 , sName = 0 , bID   = 0 , bName = 0; // index of records
+    strcpy( tempString , string );
+    for(i = 0; semiCount < 4; i++){
+        if( string[i] == ';'){
+            semiCount++;
+            continue;
+        }
+        if(semiCount == 0){
+            studentID[sID] = tempString[i];
+            sID++;
+        }else if( semiCount == 1 ){
+            studentName[sName] = tempString[i];
+            sName++;
+        }else if( semiCount == 2 ){
+            bookID[bID] = tempString[i];
+            bID++;
+        }else if( semiCount == 3 ){
+            bookName[bName] = tempString[i];
+            bName++;
+        }
+    }
+    // null terminator and create record
+    studentID[sID] = '\0';
+    existingRecord.studentID = (int) strtol( studentID , NULL , 10);
+    studentName[sName] = '\0';
+    existingRecord.studentName = _strdup(studentName);
+    bookID[bID] = '\0';
+    existingRecord.bookID = (int) strtol( bookID , NULL , 10);
+    bookName[bName] = '\0';
+    existingRecord.bookName = _strdup(bookName);;
+
+    return existingRecord;
 }

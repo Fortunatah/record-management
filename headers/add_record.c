@@ -45,6 +45,7 @@ void prompt_for_record(char *csvFile , record Record){
         // First grab the student ID
         printf("Please enter in the 3 digit student ID: ");
         int tempStudentID = verify_choice();
+        reset_buffer();
         if( tempStudentID < 1 || int_length(tempStudentID) <=2 ){
             printf("ID needs to be 3 digits long and all numbers\n");
             continue;
@@ -72,6 +73,7 @@ void prompt_for_record(char *csvFile , record Record){
         // First grab the student ID
         printf("Please enter in 5 digit Book ID: ");
         int tempBookID = verify_choice();
+        reset_buffer();
         if( tempBookID < 1 || int_length(tempBookID) <=4){
             printf("Book ID needs to be 5 digits long and all numbers\n");
             continue;

@@ -14,6 +14,8 @@ This will be the main file in which my record system runs
 #include "headers\view_records.h"
 #include "headers\search_record.h"
 #include "headers\edit_record.h"
+#include "headers\delete_record.h"
+#include "headers\help.h"
 #include "headers\general_functions.h"
 
 
@@ -158,7 +160,7 @@ int main(){
     while(1){
     int menuOption = menu();
     if ( menuOption >= 8 || menuOption < 1){
-            printf("Invalid, please enter a number between 1-9\n");
+            printf("Invalid, please enter a number between 1-7\n");
             continue;
         } // if (menuOption == -1)
     
@@ -176,10 +178,10 @@ int main(){
             edit_record_main( csvFile );
             break;
         case 5:
-            printf("delete");
+            delete_record_main( csvFile );
             break;
         case 6:
-            printf("help");
+            help_section();
             break;
         case 7:
             return 0;

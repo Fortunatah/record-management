@@ -36,6 +36,7 @@ void print_record( char *csvFile){
     // clear the screen and print the initial header
     clear_screen();
     print_header();
+    reset_buffer();
     if((file = fopen(csvFile , "r"))){
         fgets( buffer , sizeof(buffer) , file); // read the header and do nothing
         while(fgets( buffer , sizeof(buffer) , file)){ // loop the trough the file

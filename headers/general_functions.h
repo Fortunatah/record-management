@@ -13,6 +13,8 @@ int count_rows(char *fileName);
 void print_line();
 int verify_char();
 void reset_buffer();
+int find_ID_row(char *fileName , int ID);
+void tmp_to_main( char *tmpFile , char *mainFile);
 
 typedef struct{
     int studentID;
@@ -25,5 +27,6 @@ void write_to_csv(char *fileName , record Record , int cols);
 char * create_tmp_path(char * fileName);
 void temp_to_main( char *tmpFile , char *mainFile);
 char *id_exists( char *ID , char *csvFile);
+record split_record( char *string);
 
 #endif
