@@ -11,6 +11,11 @@ makes it cleaner and easier to access
 #include "general_functions.h"
 
 // Functions
+void reset_buffer(){
+    int ch;
+    while ((ch = getchar()) != '\n' && ch != EOF);
+}
+
 
 void print_line(){
     printf("\n------------------------------------------------------------------------------------------------------\n");

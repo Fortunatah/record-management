@@ -12,6 +12,68 @@ This sript will be to edit the record
 #include "general_functions.h"
 #include "edit_record.h"
 
+void prompt_for_edit(char *csvFile , record existingRecord){
+    printf("\nFollow the process to edit the record, at the end it will prompt you to confirm the edit\n");
+    while(1){
+        record oldRecord = existingRecord;
+        record newRecord;
+        // First grab the student ID
+        reset_buffer();
+        printf("Student ID is currently %d, would you like to edit it(y/n)?: ", oldRecord.studentID);
+        if((verify_char()) == 1){
+            printf("Please enter in the new 3 digit student ID: ");
+            int tempStudentID = verify_choice();
+            if( tempStudentID < 1 || int_length(tempStudentID) <=2 ){
+                printf("ID needs to be 3 digits long and all numbers\n");
+                continue;
+            }
+            // check if ID exists
+            char ID[4];
+            sprintf( ID , "%d" , tempStudentID);
+            if((id_exists( ID , csvFile)) != NULL){
+            printf("ID %s is already in Database\n" , ID);
+            continue;
+            }
+        // if all passes put entered ID as studentID 
+        newRecord.studentID = tempStudentID;
+        }else if((verify_char()) == 0){
+            newRecord.studentID = oldRecord.studentID;
+        }
+        reset_buffer();
+        printf("Student Name is currently %s, would you like to edit it(y/n)?: ", oldRecord.studentName);
+        if((verify_char()) == 1){
+            // Student's Name
+            printf("Please enter in student's name: ");
+            char *tempName = verify_string();
+            if(tempName == NULL){
+                printf("Please enter name with no numbers\n");
+                continue;
+            }
+        }else if((verify_char()) == 0){
+            newRecord.studentName = existingRecord.studentName;
+        }
+    }
+}
+
+int find_ID_row(char *fileName , int ID){
+    FILE *file = fopen( fileName , "r");
+    char IDstring[12];
+    snprintf( IDstring , sizeof(IDstring) , "%d" , ID); // put ID back into string
+    int rowsCount = 0;
+    char buffer[1024];
+    char rowID[3];
+
+    while (fgets(buffer , sizeof(buffer) , file)){
+        strncpy( rowID , buffer , 3);
+        rowID[3] = '\0'; // add null terminator
+        if((strcmp( rowID , IDstring)) == 0){
+            return rowsCount;
+        }
+        rowsCount++;
+    }
+    return rowsCount;
+}
+
 record split_record( char *string){
     record existingRecord;
     int semiCount = 0;
@@ -76,7 +138,16 @@ void verify_ID_exists( char *csvFile){
             printf("Could not find %s in database\n" , IDstring);
             return;
         }
-        record exisitngRecord = split_record( string );
+        record existingRecord = split_record( string );
+        int rows = find_ID_row( csvFile , existingRecord.studentID);
+        // prompt if they want to edit
+        reset_buffer();
+        printf("Would you like to edit studentID: %d's record?(y/n): " , existingRecord.studentID);
+        if((verify_char()) == 1){
+            prompt_for_edit(csvFile , existingRecord );
+        }else if((verify_char()) == 0){
+            return;
+        }
 
     }
 }

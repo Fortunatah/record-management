@@ -12,7 +12,7 @@ int int_length( int num );
 int count_rows(char *fileName);
 void print_line();
 int verify_char();
-
+void reset_buffer();
 
 typedef struct{
     int studentID;
