@@ -66,6 +66,7 @@ bool check_corruption(const char *path){
         for (size_t i = 0 ; i < strlen(line) ; i++){
             if( line[i] == '\0'){
                 fclose(file);
+                printf("here1");
                 return false;
             }  // if( line[i] == '\0')
         } //for (size_t i = 0 ; i < strlen(line) , i++)
@@ -85,22 +86,15 @@ bool check_corruption(const char *path){
 
     // Validate consistent column count
     if (count != cols || count != 5) {
+        printf("here2");
         fclose(file);
         return false;
     }
 
-    // Check for unclosed quotes
-    bool in_quotes = false;
-    for(size_t i = 0; i < strlen(line) ; i++){
-        if(line[i] = '"') in_quotes =  !in_quotes;
-    } //for(size_t i = 0; i < strlen(line) ; i++)
-    if (in_quotes){
-        fclose(file);
-        return false;
-    }
 
     //if no valid lines, could be corrupt
     if (cols == -1) {
+        printf("here4");
         fclose(file);
         return false;
     }
